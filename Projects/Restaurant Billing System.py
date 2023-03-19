@@ -1,7 +1,6 @@
-#Restaurant Billing system
+import re
 
-# Create a dictionary of items and their prices
-order = {
+menu = {
     "pizza": 260,
     "burger": 160,
     "fries": 80,
@@ -13,67 +12,108 @@ order = {
     "momos":80
 }
 
-def print_menu():
+orders = {}
+update_order = []
+
+def display_menu():
     print("--------------------------------")
     print("\t  SHIVBA RESTAURANT ")
     print("--------------------------------")
     print("Item Name\t\tPrice(INR)")
     print("--------------------------------")
-    for item,value in order.items():
+    for item,value in menu.items():
         print(f"{item}\t\t\t {value:.2f}")
     print("--------------------------------")
 
-tax_rate = 0.05
+def add_to_order():
+    while True:
+        item = input("Enter an item to add to your order (or 'done' to finish): ").lower()
+        if item == 'done':
+            break
+        try:
+            if not item:
+                raise ValueError("No input provided")
+        except ValueError:
+            print("No input Provided")
+            continue
+        try:
+            if not re.match("^[a-zA-Z_]*$", item):
+                raise ValueError("Input cannot contain special characters")
+        except ValueError:
+            print("Input cannot contain special characters")
+            continue
+        try:
+            if item not in menu:
+                raise ValueError("this item is not in the menu list!!")
+        except ValueError:
+            print("this item is not in the menu list!!")
+            continue
+        try:
+            quantity = int(input("Enter the quantity:"))
+        except ValueError:
+            print("Error! please don't enter point/decimal value")
+            quantity = int(input("Enter the quantity:"))
+        if quantity == 0:
+            print("You have entered no quantity...")
+            quantity = int(input("Enter the quantity:"))
+        if item in orders:
+            orders[item] += quantity
+        else:
+            orders[item] = quantity
+        print(f"Added {quantity} {item} to your order.")
 
-# Initialize the total cost and the list of items purchased
-total_cost = 0.0
-purchased_items = []
+def update_order():
+    while True:
+        item = input("Enter an item to update (or 'done' to finish): ").lower()
+        if item == 'done':
+            break
+        if item not in orders:
+            print("Sorry, that item is not in your order.")
+            continue
+        quantity = int(input("Enter the new quantity: "))
+        orders[item] = quantity
+        print(f"Updated {item} to {quantity}.")
 
-# Ask the user to input the items and their quantities
-while True:
-    print_menu()
-    item = input("Enter the item you want to order (or 'done' to finish): ")
-    if item == 'done':
-        print("Your Order Placed Successfully..")
-        break
-    if item not in order:
-        print("Item not found. Please try again.")
-        continue
-    try:
-        quantity = int(input("Enter the quantity:"))
-    except ValueError:
-        print("Quantity could not be in decimal!! Please enter valid number")
-        quantity = int(input("Enter the quantity:"))
-    if quantity == 0:
-        print('You have entered no quantity...')
-        quantity = int(input("Enter the quantity: "))
-    confirm = input("you want to confirm the order ?..(yes/no)")
-    if confirm == 'yes':
-        print("OK")
-    elif confirm == 'no':
-        quantity = int(input("Enter quantity again:"))
-    else:
-        print("Enter valid choice...")
-    purchased_items.append((item, quantity))
-    total_cost += order[item] * quantity
-
-# Calculate the tax and the final cost
-tax = total_cost * tax_rate
-final_cost = total_cost + tax
-
-# Print the bill
-enter = input("Please enter '0' to print Bill invoice :")
-if enter == '0':
+def view_order():
+    total = 0
+    if not orders:
+        print("Your order is empty.")
+        return
     print("------------------------------------")
     print("\t\tBill Invoice")
     print("------------------------------------")
     print("ITEM NAME\t\tQTY\t\tTOTAL PRICE")
     print("------------------------------------")
-    for item, quantity in purchased_items:
-        print(f"{item.capitalize()}\t\t\t {quantity} \t \t {quantity * order[item]:.2f}")
-    print("------------------------------------")
-    print(f"Total cost\t\t\t\t {total_cost:.2f}")
-    print(f"Tax\t\t\t\t\t\t {tax:.2f}")
+    for item, quantity in orders.items():
+        price = menu[item] * quantity
+        print(f"{item.title()}\t\t\t {quantity} \t \t{price:.2f}")
+        total += price
     print("-------------------------------------")
-    print(f"Final cost\t\t\t\t ₹{final_cost:.2f}/-")
+    print(f"TOTAL\t\t\t\t    {total:.2f}/-")
     print("-------------------------------------")
+
+def main():
+    while True:
+        print()
+        print("Options:")
+        print("1. Display Menu")
+        print("2. Add to Order")
+        print("3. Update Order")
+        print("4. View Order")
+        print("5. Exit")
+        choice = input("Enter your choice: ")
+        if choice == '1':
+            display_menu()
+        elif choice == '2':
+            add_to_order()
+        elif choice == '3':
+            update_order()
+        elif choice == '4':
+            view_order()
+        elif choice == '5':
+            print("Thanks for using our software!...")
+            exit()
+        else:
+            print("Invalid choice.")
+
+main()

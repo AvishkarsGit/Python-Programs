@@ -4,11 +4,8 @@ sno=1;
 n=int(input("Enter Number :"));
 
 print("Fibonacci Series:",fno,sno,end=" ");
-
-i=2;
-while i<=n:
+for i in range(2,n,1):
     tno=fno+sno;
     print(tno,end=" ");
     fno=sno;
     sno=tno;
-    i+=1;
