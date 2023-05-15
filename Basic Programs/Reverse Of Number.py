@@ -6,4 +6,4 @@ while (num > 0):
     rev = rev*10+rem;
     num = num//10;
 print("Reverse Number is  = ",rev);
-    
+
