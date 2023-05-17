@@ -54,14 +54,14 @@
     7<<2
     we write 8 bit binary table
     7 = 0 0 0 0 0 1 1 1
-    left shif =  0 0 0 1 1 1 0 0
+    left shift =  0 0 0 1 1 1 0 0
     7<<2 = 28
 
-    Bitwise (>>) rigth shift  =>
+    Bitwise (>>) right shift  =>
     7>>2
     we write 8 bit binary table
     7 =  0 0 0 0 0 1 1 1
-    left shif =  0 0 0 0 0 0 0 1
+    left shift =  0 0 0 0 0 0 0 1
     
     7>>2 = 1
 
